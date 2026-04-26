@@ -95,4 +95,4 @@ NutriQ solves this by answering one question instantly:
 
 ---
 
-## 📂 Project Structure
+
