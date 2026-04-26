@@ -1,5 +1,6 @@
 package parth.appdev.nutriq.presentation.screens.history
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,7 +13,8 @@ import parth.appdev.nutriq.ui.theme.*
 
 @Composable
 fun HistoryScreen(
-    viewModel: HistoryViewModel = hiltViewModel()
+    viewModel: HistoryViewModel = hiltViewModel(),
+    onItemClick: (HistoryItem) -> Unit
 ) {
 
     val history = viewModel.history.collectAsState()
@@ -45,7 +47,8 @@ fun HistoryScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 6.dp),
+                    .padding(vertical = 6.dp)
+                    .clickable { onItemClick(item) },
                 elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {

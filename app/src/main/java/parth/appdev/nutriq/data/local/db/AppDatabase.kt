@@ -7,7 +7,7 @@ import parth.appdev.nutriq.data.local.entity.FoodEntity
 
 @Database(
     entities = [FoodEntity::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun foodDao(): FoodDao

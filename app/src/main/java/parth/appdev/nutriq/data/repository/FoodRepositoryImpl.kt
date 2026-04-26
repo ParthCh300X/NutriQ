@@ -20,6 +20,7 @@ class FoodRepositoryImpl @Inject constructor(
             FoodEntity(
                 name = food.name,
                 risk = food.riskLevel.name,
+                ingredients = food.ingredients,
                 timestamp = System.currentTimeMillis()
             )
         )

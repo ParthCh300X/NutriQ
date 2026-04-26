@@ -21,7 +21,8 @@ class HistoryViewModel @Inject constructor(
                 list.map {
                     HistoryItem(
                         name = it.name,
-                        risk = it.risk
+                        risk = it.risk,
+                        ingredients = it.ingredients
                     )
                 }
             }
@@ -34,5 +35,6 @@ class HistoryViewModel @Inject constructor(
 
 data class HistoryItem(
     val name: String,
-    val risk: String
+    val risk: String,
+    val ingredients: String
 )

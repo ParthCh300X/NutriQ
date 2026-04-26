@@ -35,7 +35,7 @@ object AppModule {
             context,
             AppDatabase::class.java,
             "nutriq_db"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides

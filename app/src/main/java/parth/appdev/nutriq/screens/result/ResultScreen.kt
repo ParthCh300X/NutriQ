@@ -38,7 +38,6 @@ fun ResultScreen(food: Food) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // 🧾 Product Name
         Text(
             text = food.name,
             style = MaterialTheme.typography.headlineSmall,
@@ -47,7 +46,6 @@ fun ResultScreen(food: Food) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🎯 Risk Label
         Text(
             text = label,
             color = color,
@@ -56,7 +54,6 @@ fun ResultScreen(food: Food) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // ⚠️ Reasons or Unknown Message
         if (food.riskLevel == RiskLevel.UNKNOWN) {
             Text(
                 text = "⚠️ Unable to analyze this product",
@@ -70,7 +67,6 @@ fun ResultScreen(food: Food) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 🧪 Ingredients Section
         Text(
             text = "Ingredients:",
             style = MaterialTheme.typography.titleMedium
