@@ -16,14 +16,22 @@ class FoodRepositoryImpl @Inject constructor(
         api.getProduct(barcode)
 
     suspend fun saveFood(food: Food) {
-        dao.insert(
-            FoodEntity(
-                name = food.name,
-                risk = food.riskLevel.name,
-                ingredients = food.ingredients,
-                timestamp = System.currentTimeMillis()
-            )
+
+        val existing = dao.getFoodByName(food.name)
+
+        val entity = FoodEntity(
+            name = food.name,
+            risk = food.riskLevel.name,
+            ingredients = food.ingredients,
+            timestamp = System.currentTimeMillis()
         )
+
+        if (existing != null) {
+            // 🔁 Update existing (keeps list clean)
+            dao.update(entity.copy(id = existing.id))
+        } else {
+            dao.insert(entity)
+        }
     }
 
     fun getHistory(): Flow<List<FoodEntity>> = dao.getAll()

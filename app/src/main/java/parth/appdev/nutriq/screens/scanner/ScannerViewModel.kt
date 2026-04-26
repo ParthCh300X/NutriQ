@@ -18,12 +18,19 @@ class ScannerViewModel @Inject constructor(
 
     private val analyzer = AnalyzeFoodUseCase()
 
+    // 🔹 UI state (used for result display if needed)
     private val _uiState = MutableStateFlow<Food?>(null)
     val uiState: StateFlow<Food?> = _uiState
 
+    // 🔹 Scan trigger state (used for animation + navigation)
+    private val _scannedFood = MutableStateFlow<Food?>(null)
+    val scannedFood: StateFlow<Food?> = _scannedFood
+
     fun fetchProduct(barcode: String) {
         viewModelScope.launch {
+
             val response = repo.getFood(barcode)
+
             if (response.isSuccessful) {
                 val product = response.body()?.product
 
@@ -32,7 +39,11 @@ class ScannerViewModel @Inject constructor(
                     product?.ingredients_text
                 )
 
+                // 🔥 Update states
                 _uiState.value = result
+                _scannedFood.value = result
+
+                // 💾 Save to history
                 repo.saveFood(result)
             }
         }
@@ -40,5 +51,6 @@ class ScannerViewModel @Inject constructor(
 
     fun reset() {
         _uiState.value = null
+        _scannedFood.value = null
     }
 }

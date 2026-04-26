@@ -26,7 +26,7 @@ fun CameraPreview(viewModel: ScannerViewModel) {
     // 🔒 Prevent multiple scans
     var hasScanned by remember { mutableStateOf(false) }
 
-    // 🔥 Stable ML scanner
+    // 🔥 Stable ML Kit instance
     val barcodeScanner = remember { BarcodeScanning.getClient() }
 
     AndroidView(
@@ -78,19 +78,18 @@ fun CameraPreview(viewModel: ScannerViewModel) {
 
                                         Log.d("NutriQ", "Barcode: $rawValue")
 
-                                        // 🔔 Visible feedback (VERY IMPORTANT)
+                                        // 🔔 Feedback
                                         Toast.makeText(
                                             context,
-                                            "Scanned: $rawValue",
+                                            "Scanned",
                                             Toast.LENGTH_SHORT
                                         ).show()
 
-                                        // 🚀 Trigger API call
+                                        // 🚀 Trigger backend
                                         viewModel.fetchProduct(rawValue)
                                         break
                                     }
                                 }
-
                             }
                             .addOnFailureListener {
                                 Log.e("NutriQ", "Scan failed", it)
