@@ -1,6 +1,10 @@
 package parth.appdev.nutriq.data.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import parth.appdev.nutriq.data.local.entity.FoodEntity
 
@@ -16,6 +20,12 @@ interface FoodDao {
     @Query("SELECT * FROM history ORDER BY timestamp DESC")
     fun getAll(): Flow<List<FoodEntity>>
 
-    @Query("SELECT * FROM history WHERE name = :name LIMIT 1")
-    suspend fun getFoodByName(name: String): FoodEntity?
+    @Query("SELECT * FROM history WHERE barcode = :barcode LIMIT 1")
+    suspend fun getFoodByBarcode(barcode: String): FoodEntity?
+
+    @Query("DELETE FROM history WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
+    @Query("DELETE FROM history")
+    suspend fun clearAll()
 }

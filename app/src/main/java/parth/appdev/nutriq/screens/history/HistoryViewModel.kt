@@ -1,40 +1,31 @@
-package parth.appdev.nutriq.presentation.screens.history
+package parth.appdev.nutriq.screens.history
 
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-import parth.appdev.nutriq.data.repository.FoodRepositoryImpl
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import parth.appdev.nutriq.data.local.entity.FoodEntity
+import parth.appdev.nutriq.domain.repository.FoodRepository
+import parth.appdev.nutriq.presentation.common.UiState
+import javax.inject.Inject
 
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
-    repo: FoodRepositoryImpl
+    private val repo: FoodRepository
 ) : ViewModel() {
 
-    val history: StateFlow<List<HistoryItem>> =
+    val historyState: StateFlow<UiState<List<FoodEntity>>> =
         repo.getHistory()
             .map { list ->
-                list.map {
-                    HistoryItem(
-                        name = it.name,
-                        risk = it.risk,
-                        ingredients = it.ingredients
-                    )
-                }
+                if (list.isEmpty()) UiState.NotFound
+                else UiState.Success(list)
             }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
-                initialValue = emptyList()
+                initialValue = UiState.Loading
             )
 }
-
-data class HistoryItem(
-    val name: String,
-    val risk: String,
-    val ingredients: String
-)

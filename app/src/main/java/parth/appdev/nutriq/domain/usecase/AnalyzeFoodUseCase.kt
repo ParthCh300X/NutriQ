@@ -2,13 +2,15 @@ package parth.appdev.nutriq.domain.usecase
 
 import parth.appdev.nutriq.domain.model.Food
 import parth.appdev.nutriq.domain.model.RiskLevel
+import javax.inject.Inject
 
-class AnalyzeFoodUseCase {
+class AnalyzeFoodUseCase @Inject constructor() {
 
-    fun execute(name: String?, ingredients: String?): Food {
+    fun execute(barcode: String, name: String?, ingredients: String?): Food {
 
         if (name.isNullOrBlank() || ingredients.isNullOrBlank()) {
             return Food(
+                barcode = barcode,
                 name = name ?: "Unknown Product",
                 ingredients = "No data available",
                 riskLevel = RiskLevel.UNKNOWN,
@@ -25,14 +27,14 @@ class AnalyzeFoodUseCase {
             reasons.add("Contains added sugars")
         }
 
-        if (ing.contains("palm oil") || ing.contains("vegetable fat") || ing.contains("hydrogenated")) {
+        if (ing.contains("palm oil") || ing.contains("hydrogenated")) {
             score += 2
             reasons.add("Contains processed fats")
         }
 
-        if (ing.contains("emulsifier") || ing.contains("lecithin") || ing.contains("flavour")) {
+        if (ing.contains("emulsifier (") || ing.contains("artificial flavour") || ing.contains("colour (")) {
             score += 1
-            reasons.add("Contains additives")
+            reasons.add("Contains artificial additives")
         }
 
         val level = when {
@@ -42,6 +44,7 @@ class AnalyzeFoodUseCase {
         }
 
         return Food(
+            barcode = barcode,
             name = name,
             ingredients = ingredients,
             riskLevel = level,

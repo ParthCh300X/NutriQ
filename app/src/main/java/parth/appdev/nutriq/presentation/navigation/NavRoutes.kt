@@ -4,5 +4,7 @@ sealed class NavRoutes(val route: String) {
     object Home : NavRoutes("home")
     object Scanner : NavRoutes("scanner")
     object History : NavRoutes("history")
-    object Result : NavRoutes("result")
+    object Result : NavRoutes("result/{barcode}") {
+        fun createRoute(barcode: String) = "result/$barcode"
+    }
 }
